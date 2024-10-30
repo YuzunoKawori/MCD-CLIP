@@ -1,3 +1,3 @@
 # YRSK-CLIP
-The Code will coming soon...\r
+The Code will coming soon...  
 My code is poorly written may take a while to sort out. QAQ
