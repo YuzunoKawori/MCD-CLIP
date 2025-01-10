@@ -1,34 +1,14 @@
 import os
-os.environ["HF_ENDPOINT"] = "https://hf-mirror.com"
 import torch
 import torch.nn as nn
-import numpy as np
-import torch.nn.functional as F
 from einops import rearrange, repeat
-from timm.models.vision_transformer import Block
 from operator import mul
-import torchvision.transforms as transforms
-import huggingface
-import math
-from PIL import Image
 from functools import reduce
-from torch.utils.data import ConcatDataset
 import clip
-from meta_net import meta_net
 from adapter import adapter
-from torch.nn.modules.utils import _pair
-from torch.nn.modules.utils import _pair
-from transformers.models.clip import CLIPTokenizer
-from transformers.models.clip import CLIPTextModel
-import matplotlib.pyplot as plt
-import open_clip
 from mlp import mlp
-from Inter_view_Adapter import In_Adapter
-from torchvision.transforms import ToPILImage
-# from transformers import BlipForQuestionAnswering, BlipProcessor
-from transformers import  AutoProcessor,Blip2ForConditionalGeneration
 from lavis.models import load_model_and_preprocess
-from attribute_network import attribute
+os.environ["HF_ENDPOINT"] = "https://hf-mirror.com"
 class MCDCLIP(nn.Module):
     def __init__(self,classname,prompt_num,prompt_dim,embedding_dim,re_com_dim,re_pri_dim,alpha):
         super().__init__()
