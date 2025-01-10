@@ -5,10 +5,27 @@ from einops import rearrange, repeat
 from operator import mul
 from functools import reduce
 import clip
-from adapter import adapter
-from mlp import mlp
 from lavis.models import load_model_and_preprocess
 os.environ["HF_ENDPOINT"] = "https://hf-mirror.com"
+class mlp(torch.nn.Module):
+    def __init__(self,num_i,num_o):
+        super(mlp,self).__init__()
+        self.linear2=torch.nn.Linear(num_i,num_o)
+    def forward(self, x):
+        x=self.linear2(x)
+        return x
+class adapter(torch.nn.Module):
+    def __init__(self, c_in, reduction=4):
+        super(adapter, self).__init__()
+        self.fc = torch.nn.Sequential(
+            torch.nn.Linear(c_in, c_in // reduction, bias=False),
+            torch.nn.ReLU(inplace=True),
+            torch.nn.Linear(c_in // reduction, c_in, bias=False),
+            torch.nn.ReLU(inplace=True)
+        )
+    def forward(self, x):
+        x = self.fc(x)
+        return x
 class MCDCLIP(nn.Module):
     def __init__(self,classname,prompt_num,prompt_dim,embedding_dim,re_com_dim,re_pri_dim,alpha):
         super().__init__()
