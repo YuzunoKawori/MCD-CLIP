@@ -12,9 +12,9 @@ import torch
 from torchmetrics import AUROC
 from sklearn.metrics import confusion_matrix
 import matplotlib
-from dataset_miccai import CheXpertDataset
+from dataset import CheXpertDataset
 matplotlib.use('Agg')
-import model_collection
+import model
 os.environ["CUDA_VISIBLE_DEVICES"] = "0,1"
 torch.set_printoptions(threshold=np.inf)
 class_x=['normal lungs','abnormal lungs']
@@ -210,6 +210,7 @@ parser.add_argument('--num_for_train',type=int,default=2,help="num for train the
 parser.add_argument('--choose_few_shot',type=int,default=0,help="if use few_shot train")
 parser.add_argument('--num_class',type=int,default=2,help="num of class")
 parser.add_argument('--dropout_rate',type=int,default=0.5,help="the rate of dropout")
+
 args = parser.parse_args()
 print(args)
 wandb.config.update(args)
@@ -235,7 +236,7 @@ for class_name in task_names:
                                 pin_memory=True)
     val_loader = DataLoader(val_dataset, batch_size=1, shuffle=False)
     test_loader = DataLoader(test_dataset, batch_size=1, shuffle=False)
-    model = model_collection.ICLIP_without_douple(class_x)
+    model = model.MCDCLIP(class_x)
     model = model.to(torch.float32)
     model.to(device)
     wandb.watch(model)
