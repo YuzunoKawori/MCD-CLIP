@@ -30,7 +30,7 @@ from transformers import  AutoProcessor,Blip2ForConditionalGeneration
 from lavis.models import load_model_and_preprocess
 from attribute_network import attribute
 class MCDCLIP(nn.Module):
-    def __init__(self,num_class,prompt_num,prompt_dim,embedding_dim,re_com_dim,re_pri_dim,alpha):
+    def __init__(self,classname,prompt_num,prompt_dim,embedding_dim,re_com_dim,re_pri_dim,alpha):
         super().__init__()
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.alpha=alpha
@@ -42,8 +42,8 @@ class MCDCLIP(nn.Module):
         self.model, self.preprocess = clip.load('ViT-B/32', device)
         self.prompt_embeddings_front = nn.Parameter(torch.randn(
             1, self.prompt_num, 768).to(device))
-        self.num_class=len(num_class)
-        self.x_class=num_class
+        self.num_class=len(classname)
+        self.x_class=classname
         self.re_common=nn.Parameter(torch.randn(self.num_class, self.re_com_dim).to(device))
         self.Common_Adapter=adapter(self.embedding_dim)
         self.Private_Adapter_front=adapter(self.embedding_dim)
