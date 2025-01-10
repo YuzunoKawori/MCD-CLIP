@@ -14,7 +14,7 @@ from sklearn.metrics import confusion_matrix
 import matplotlib
 from dataset import CheXpertDataset
 matplotlib.use('Agg')
-import model
+import model_mcd
 os.environ["CUDA_VISIBLE_DEVICES"] = "0,1"
 torch.set_printoptions(threshold=np.inf)
 class_x=['normal lungs','abnormal lungs']
@@ -126,7 +126,7 @@ def train(train_loader,model,arg,fix,val_loader,train_set):
 def test(test_loader,arg,testset):
     test_correct=0
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = model_collection.ICLIP_without_douple(class_x)
+    model = model.MCDCLIP(class_x,20,768,512,512,512)
     model = model.to(torch.float32)
     model.load_state_dict(torch.load('model.pth'))
     model.to(device)
@@ -178,14 +178,14 @@ def test(test_loader,arg,testset):
         print(test_auc)
         pre_test=torch.tensor(pre_test)
         true_test=torch.tensor(true_test)
-        print("模型的准确率为:{:.03f}%".format(100 *test_correct/num))
+        print("Accuracy:{:.03f}%".format(100 *test_correct/num))
         wandb.log({
             "Auc": test_auc})
         wandb.log({
             "Acc": (100 *test_correct/len(testset))})
     return test_correct/len(testset)
 run = wandb.init(project="Abain_new",
-                 entity="yuzunokawori"#告诉网址你的身份
+                 entity="yuzunokawori"
                  )     
 parser = argparse.ArgumentParser(description='PyTorch MCDCLIP bags Example')
 parser.add_argument('--epochs', type=int, default=60, metavar='N',
@@ -236,7 +236,7 @@ for class_name in task_names:
                                 pin_memory=True)
     val_loader = DataLoader(val_dataset, batch_size=1, shuffle=False)
     test_loader = DataLoader(test_dataset, batch_size=1, shuffle=False)
-    model = model.MCDCLIP(class_x)
+    model = model.MCDCLIP(class_x,20,768,512,512,512)
     model = model.to(torch.float32)
     model.to(device)
     wandb.watch(model)
