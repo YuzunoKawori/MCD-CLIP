@@ -8,7 +8,6 @@ def register_dataset(cls):
     datasets[cls.__name__] = cls
     return cls
 
-# 数据加载器类
 @register_dataset
 class CheXpertDataset(torch.utils.data.Dataset):
     LABEL_MAP = {99: 99, -1: 99, 0: 0, 1: 1}
