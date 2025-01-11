@@ -8,4 +8,5 @@ The experiments were run on:
 - Cuda 12.1
 ## Dataset
 The data from [CheXpert](https://stanfordmlgroup.github.io/competitions/chexpert/) datasets is not included here, but can be downloaded elsewhere.
-The specific treatment can be referred to the official implementation of the [CVT](https://github.com/gvtulder/cross-view-transformers).
+The specific treatment can be referred to the official implementation of the [cross-view-transformers
+](https://github.com/gvtulder/cross-view-transformers).
