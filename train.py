@@ -126,7 +126,7 @@ def train(train_loader,model,arg,fix,val_loader,train_set):
 def test(test_loader,arg,testset):
     test_correct=0
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = model.MCDCLIP(class_x,20,768,512,512,512)
+    model = model_mcd.MCDCLIP(class_x,20,768,512,512,512,args.alpha)
     model = model.to(torch.float32)
     model.load_state_dict(torch.load('model.pth'))
     model.to(device)
@@ -210,7 +210,7 @@ parser.add_argument('--num_for_train',type=int,default=2,help="num for train the
 parser.add_argument('--choose_few_shot',type=int,default=0,help="if use few_shot train")
 parser.add_argument('--num_class',type=int,default=2,help="num of class")
 parser.add_argument('--dropout_rate',type=int,default=0.5,help="the rate of dropout")
-
+parser.add_argument('--alpha',type=int,default=0.5,help="the rate of weight bwteen views")
 args = parser.parse_args()
 print(args)
 wandb.config.update(args)
@@ -236,7 +236,7 @@ for class_name in task_names:
                                 pin_memory=True)
     val_loader = DataLoader(val_dataset, batch_size=1, shuffle=False)
     test_loader = DataLoader(test_dataset, batch_size=1, shuffle=False)
-    model = model.MCDCLIP(class_x,20,768,512,512,512)
+    model = model_mcd.MCDCLIP(class_x,20,768,512,512,512,args.alpha)
     model = model.to(torch.float32)
     model.to(device)
     wandb.watch(model)
