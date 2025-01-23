@@ -1,6 +1,4 @@
 # MCD-CLIP: Multi-view Chest Disease Diagnosis with Disentangled CLIP
-The Code will coming soon...  
-My code is poorly written may take a while to sort out. QAQ
 ## Requirements
 The experiments were run on:
 - Python 3.8.10 
