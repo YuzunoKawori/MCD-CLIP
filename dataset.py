@@ -10,7 +10,7 @@ def register_dataset(cls):
 
 @register_dataset
 class CheXpertDataset(torch.utils.data.Dataset):
-    LABEL_MAP = {99: 99, -1: 99, 0: 0, 1: 1}
+    LABEL_MAP = {99: 99, -1: 1, 0: 0, 1: 1}
 
     def __init__(self, datafile, task='No Finding', augment=False, dtype=float, dtype_x=None, dtype_y=None, views=['frontal', 'lateral']):
         super().__init__()
