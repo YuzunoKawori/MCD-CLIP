@@ -60,7 +60,7 @@ class MCDCLIP(nn.Module):
         view_1_cls_feature=self.model.encode_image(view_1,1,self.prompt_embeddings_front)
         view_2_cls_feature=self.model.encode_image(view_2,1,self.Prompt_Aligner(self.prompt_embeddings_front))
 
-        #feature disentangling
+        #Representation Disentanglement
         view_1_com=self.Common_Adapter(view_1_cls_feature)
         view_2_com=self.Common_Adapter(view_2_cls_feature)
         view_1_com=self.mlp(view_1_com)
@@ -68,7 +68,7 @@ class MCDCLIP(nn.Module):
         view_1_pri=self.Private_Adapter_front(view_1_cls_feature)
         view_2_pri=self.Private_Adapter_later(view_2_cls_feature)
 
-        #Add Additional Textual Representations
+        #Txtual Representaion Enhancement
         text = [f"a photo of {cls}." for cls in self.x_class]
         text_emb_front=clip.tokenize(text).to(device)
         text_emb_later=clip.tokenize(text).to(device)
