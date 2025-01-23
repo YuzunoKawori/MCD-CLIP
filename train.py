@@ -17,9 +17,7 @@ import model_mcd
 os.environ["CUDA_VISIBLE_DEVICES"] = "0,1"
 torch.set_printoptions(threshold=np.inf)
 class_x=['normal lungs','abnormal lungs']
-task_names = [ 'Atelectasis', 'Cardiomegaly', 'Consolidation', 'Edema', 'Enlarged Cardiomediastinum', 'Fracture', 
-              'Lung Lesion','Lung Opacity','Pleural Effusion', 'Pleural Other', 'Pneumonia', 
-             'Pneumothorax', 'Support Devices']
+task_name= 'Atelectasis'
 def setup_seed(seed):
     torch.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
@@ -203,22 +201,20 @@ torch.cuda.set_device(args.device)
 print('GPU: ', torch.cuda.current_device())
 setup_seed(args.seed)
 
-for class_name in task_names:
-    print(class_name)
-    train_dataset = CheXpertDataset('/home/songyue/.workplace/data/data/chexpert-small-csy-custom-train.h5', task=class_name)
-    val_dataset = CheXpertDataset('/home/songyue/.workplace/data/data/chexpert-small-csy-custom-val.h5', task=class_name)
-    test_dataset = CheXpertDataset('/home/songyue/.workplace/data/data/chexpert-small-csy-custom-test.h5', task=class_name)
-    print(f"the number of train set: {len(train_dataset)}")
-    print(f"the number of validation set: {len(val_dataset)}")
-    print(f"the number of test set: {len(test_dataset)}")
-    train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True,num_workers=8,
-                                pin_memory=True)
-    val_loader = DataLoader(val_dataset, batch_size=1, shuffle=False)
-    test_loader = DataLoader(test_dataset, batch_size=1, shuffle=False)
-    model = model_mcd.MCDCLIP(class_x,20,768,512,512,512,args.alpha)
-    model = model.to(torch.float32)
-    model.to(device)
-    print("Train start: -----------------------------------------------------------")
-    train(train_loader,model,args,args.lr,val_loader,train_dataset)
-    print("Test start: -----------------------------------------------------------")
-    now_acc=test(test_loader,args,test_dataset)
+train_dataset = CheXpertDataset('train.h5', task=class_name)
+val_dataset = CheXpertDataset('val.h5', task=class_name)
+test_dataset = CheXpertDataset('test.h5', task=class_name)
+print(f"the number of train set: {len(train_dataset)}")
+print(f"the number of validation set: {len(val_dataset)}")
+print(f"the number of test set: {len(test_dataset)}")
+train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True,num_workers=8,
+                            pin_memory=True)
+val_loader = DataLoader(val_dataset, batch_size=1, shuffle=False)
+test_loader = DataLoader(test_dataset, batch_size=1, shuffle=False)
+model = model_mcd.MCDCLIP(class_x,20,768,512,512,512,args.alpha)
+model = model.to(torch.float32)
+model.to(device)
+print("Train start: -----------------------------------------------------------")
+train(train_loader,model,args,args.lr,val_loader,train_dataset)
+print("Test start: -----------------------------------------------------------")
+now_acc=test(test_loader,args,test_dataset)
