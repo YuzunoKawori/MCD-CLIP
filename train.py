@@ -17,7 +17,6 @@ import model_mcd
 os.environ["CUDA_VISIBLE_DEVICES"] = "0,1"
 torch.set_printoptions(threshold=np.inf)
 class_x=['normal lungs','abnormal lungs']
-task_name= 'Atelectasis'
 def setup_seed(seed):
     torch.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
@@ -200,7 +199,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 torch.cuda.set_device(args.device)
 print('GPU: ', torch.cuda.current_device())
 setup_seed(args.seed)
-
+class_name= 'Atelectasis'
 train_dataset = CheXpertDataset('train.h5', task=class_name)
 val_dataset = CheXpertDataset('val.h5', task=class_name)
 test_dataset = CheXpertDataset('test.h5', task=class_name)
