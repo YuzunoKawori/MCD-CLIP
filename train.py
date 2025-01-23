@@ -5,7 +5,6 @@ import torch.utils
 from skimage.util import view_as_windows
 from torch.utils.data import random_split, DataLoader
 import random
-import wandb
 import time
 import argparse
 import torch
@@ -64,10 +63,6 @@ def train(train_loader,model,arg,fix,val_loader,train_set):
             sum_loss+=loss.data
             train_correct+=torch.sum(id==y.data)
             batch_num+=1
-        wandb.log({
-        "train_loss": sum_loss / len(train_loader)})
-        wandb.log({
-        "train_acc":  (100 * train_correct / len(train_set))})
         print('[%d,%d] loss:%.03f' % (epoch + 1, arg.epochs, sum_loss / len(train_loader)))
         print('        correct:%.03f%%' % (100  *train_correct / len(train_set)))
         print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()))
@@ -113,10 +108,6 @@ def train(train_loader,model,arg,fix,val_loader,train_set):
             pre= pre[:,1]
             val_auc=val_auc_en(pre.cpu(),true_val)
             print('[%d,%d] val_loss:%.03f' % (epoch + 1, arg.epochs, val_loss / num))
-            wandb.log({
-            "val_loss": val_loss / num})
-            wandb.log({
-                "Val Auc": val_auc})
             print(val_auc)
             print(max_auc)
             if  val_auc>max_auc:
@@ -179,16 +170,9 @@ def test(test_loader,arg,testset):
         pre_test=torch.tensor(pre_test)
         true_test=torch.tensor(true_test)
         print("Accuracy:{:.03f}%".format(100 *test_correct/num))
-        wandb.log({
-            "Auc": test_auc})
-        wandb.log({
-            "Acc": (100 *test_correct/len(testset))})
     return test_correct/len(testset)
-run = wandb.init(project="Abain_new",
-                 entity="yuzunokawori"
-                 )     
 parser = argparse.ArgumentParser(description='PyTorch MCDCLIP bags Example')
-parser.add_argument('--epochs', type=int, default=60, metavar='N',
+parser.add_argument('--epochs', type=int, default=120, metavar='N',
                     help='number of epochs to train (default: 20)')
 parser.add_argument('--lr', type=float, default=0.0001, metavar='LR',
                     help='learning rate (default: 0.001)')
@@ -213,15 +197,10 @@ parser.add_argument('--dropout_rate',type=int,default=0.5,help="the rate of drop
 parser.add_argument('--alpha',type=int,default=0.5,help="the rate of weight bwteen views")
 args = parser.parse_args()
 print(args)
-wandb.config.update(args)
 print(torch.cuda.device_count())
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 torch.cuda.set_device(args.device)
 print('GPU: ', torch.cuda.current_device())
-args.lr=wandb.config.lr
-args.batch_size=wandb.config.batch_size
-args.reg=wandb.config.reg
-print(wandb.config)
 setup_seed(args.seed)
 
 for class_name in task_names:
@@ -239,7 +218,6 @@ for class_name in task_names:
     model = model_mcd.MCDCLIP(class_x,20,768,512,512,512,args.alpha)
     model = model.to(torch.float32)
     model.to(device)
-    wandb.watch(model)
     print("Train start: -----------------------------------------------------------")
     train(train_loader,model,args,args.lr,val_loader,train_dataset)
     print("Test start: -----------------------------------------------------------")
