@@ -1,6 +1,6 @@
 # MCD-CLIP: Multi-view Chest Disease Diagnosis with Disentangled CLIP
 ## News
-**MCD-CLIP** has been accepted by IJCAI 2025! :star2: :star2: :star2: 
+-[2025.4.30] **MCD-CLIP** has been accepted by IJCAI 2025! :star2: :star2: :star2: 
 ## Requirements
 The experiments were run on:
 - Python 3.8.10 
