@@ -1,4 +1,4 @@
-# MCD-CLIP: Multi-view Chest Disease Diagnosis with Disentangled CLIP
+## ![Static Badge](https://img.shields.io/badge/IJCAI-2025-red) MCD-CLIP: Multi-view Chest Disease Diagnosis with Disentangled CLIP
 ## News
 - [2025.4.30] **MCD-CLIP** has been accepted by IJCAI 2025! :star2: :star2: :star2: 
 ## Requirements
