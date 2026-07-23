@@ -1,4 +1,5 @@
 ## ![Static Badge](https://img.shields.io/badge/IJCAI-2025-red) MCD-CLIP: Multi-view Chest Disease Diagnosis with Disentangled CLIP
+This repository contains the official PyTorch implementation of our paper: [MCD-CLIP: Multi-view Chest Disease Diagnosis with Disentangled CLIP](https://www.ijcai.org/proceedings/2025/79).
 ## News
 - [2025.4.30] **MCD-CLIP** has been accepted by IJCAI 2025! :star2: :star2: :star2: 
 ## Requirements
